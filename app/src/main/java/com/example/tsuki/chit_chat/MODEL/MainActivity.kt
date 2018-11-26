@@ -5,34 +5,34 @@ import android.os.Bundle
 import android.widget.TextView
 import com.example.tsuki.chit_chat.R
 import com.example.tsuki.chit_chat.UTIL.CCApiTask
-import com.example.tsuki.chit_chat.UTIL.CCEventListener
 
-class MainActivity : AppCompatActivity(), CCEventListener {
+class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // create api task to get initial data
         val apiTask = CCApiTask(
-                this,
                 "https://www.stepoutnyc.com/chitchat",
-                CCApiTask.Companion.METHODS.GET
+                CCApiTask.Companion.METHODS.GET,
+                { data -> onFeedData(data) },
+                { onFeedRequestFailure() }
         )
 
+        // execute api call
         apiTask.execute()
     }
 
-    override fun OnEventCompletion(resp: String) {
+    private fun onFeedData(data: String) {
         val textView = findViewById<TextView>(R.id.respview)
 
-        textView.text = resp
+        textView.text = data
+
+        // TODO: Process feed data
     }
 
-    override fun OnEventFailure() {
-
-    }
-
-    fun noop() : Unit {
-        println("ok")
+    private fun onFeedRequestFailure() {
+        // TODO: Establish feed request failure method
     }
 }
