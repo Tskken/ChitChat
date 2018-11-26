@@ -1,4 +1,4 @@
-package com.example.tsuki.chit_chat.MODEL
+package com.example.tsuki.chit_chat.CONTROLLER
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
