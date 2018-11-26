@@ -1,7 +1,8 @@
-package com.example.tsuki.chit_chat
+package com.example.tsuki.chit_chat.MODEL
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import com.example.tsuki.chit_chat.R
 
 class MainActivity : AppCompatActivity() {
 
