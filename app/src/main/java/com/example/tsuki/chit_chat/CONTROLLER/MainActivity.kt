@@ -15,10 +15,10 @@ class MainActivity : AppCompatActivity() {
 
         // create api task to get initial data
         val apiTask = CCApiTask(
-                "https://www.stepoutnyc.com/chitchat",
+                sServerURL,
                 CCApiTask.Companion.METHODS.GET,
                 { data -> onFeedData(data) },
-                { onFeedRequestFailure() }
+                { onRequestFailure() }
         )
 
         // execute api call
@@ -56,7 +56,51 @@ class MainActivity : AppCompatActivity() {
         */
     }
 
-    private fun onFeedRequestFailure() {
+    private fun likeMessage(messageId: String) {
+        // create api task
+        val apiTask = CCApiTask(
+                "$sServerURL/like/$messageId",
+                CCApiTask.Companion.METHODS.GET,
+                { data -> /* todo: determine how we deal with data */ },
+                { onRequestFailure() }
+        )
+
+        // execute api call
+        apiTask.execute()
+    }
+
+    private fun dislikeMessage(messageId: String) {
+        // create api task
+        val apiTask = CCApiTask(
+                "$sServerURL/dislike/$messageId",
+                CCApiTask.Companion.METHODS.GET,
+                { data -> /* todo: determine how we deal with data */ },
+                { onRequestFailure() }
+        )
+
+        // execute api call
+        apiTask.execute()
+    }
+
+    private fun postMessage(message: String) {
+        // create api task
+        val apiTask = CCApiTask(
+                sServerURL,
+                CCApiTask.Companion.METHODS.POST,
+                { data -> /* todo: determine how we deal with data */ },
+                { onRequestFailure() },
+                message
+        )
+
+        // execute api call
+        apiTask.execute()
+    }
+
+    private fun onRequestFailure() {
         // TODO: Establish feed request failure method
+    }
+
+    private companion object {
+        const val sServerURL = "https://www.stepoutnyc.com/chitchat"
     }
 }
