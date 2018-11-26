@@ -10,35 +10,83 @@ import java.net.URL
 class CCApiTask(
         private val mCallback: CCEventListener?,
         private val mAddress: String,
-        private val mMethod: () -> Unit,
+        private val mMethod: METHODS,
         private val mData: String? = null
-) : AsyncTask<Void, Void, Void>() {
+) : AsyncTask<String, String, String>() {
 
     companion object {
-        private const val API_KEY = "yvdkGTQbTvykiSxg11cK9QKbxFh1MMcXuaMFgcb7zqaB4gl3XA8DvMRR8J4NsewEwjUB3dyaKuC84YqA_dK7CqhQ8TPtJVr71Q_PNZJ8ig7uTNTpNuRHtgTBsdSeWnYx"
+        enum class METHODS {
+            GET, POST
+        }
+
+        private const val API_KEY = "436a85b4-9966-428c-b608-0552b9c55a01"
+        private const val EMAIL = "easter@champlain.edu"
     }
 
     private var mResponse = ""
 
-    override fun doInBackground(vararg voids: Void): Void? {
-        try {
-            val obj = URL(mAddress)
-            val con = obj.openConnection() as HttpURLConnection
+//    override fun doInBackground(vararg voids: String): String? {
+//        try {
+//            val obj = URL(mAddress)
+//            val con = obj.openConnection() as HttpURLConnection
+//
+//            con.requestMethod = mMethod.name
+//            con.setRequestProperty("key", API_KEY)
+//            con.setRequestProperty("client", EMAIL)
+//
+//            val responseCode = con.responseCode
+//            println("Sending GET Request to URL: $mAddress")
+//            println("Response Code: $responseCode")
+//
+//            val inStream = BufferedReader(
+//                    InputStreamReader(con.inputStream))
+//            var inputLine: String? = inStream.readLine()
+//            val servResponse = StringBuilder()
+//
+//            while (inputLine != null) {
+//                servResponse.append(inputLine)
+//                inputLine = inStream.readLine()
+//            }
+//
+//            inStream.close()
+//
+//            //print result
+//            println("Server responded with " + servResponse.toString())
+//            this.mResponse = servResponse.toString()
+//        } catch (e: Exception) {
+//            mCallback?.OnEventFailure()
+//        }
+//
+//        return null
+//    }
 
-            con.requestMethod = "GET"
-            con.setRequestProperty("Authorization", "Bearer $API_KEY")
+    override fun doInBackground(vararg params: String): String? {
+        var urlString = "$mAddress?key=$API_KEY&client=$EMAIL"
+
+        try {
+
+            if (this.mMethod.equals(METHODS.POST.name)) {
+                urlString += "&message=$mData"
+            }
+
+            val url = URL(urlString)
+
+            val con = url.openConnection() as HttpURLConnection
+
+            con.requestMethod = this.mMethod.name
 
             val responseCode = con.responseCode
-            println("Sending GET Request to URL: $mAddress")
+            println("Sending ${mMethod.name} Request to URL: $mAddress")
             println("Response Code: $responseCode")
 
             val inStream = BufferedReader(
                     InputStreamReader(con.inputStream))
-            val inputLine: String? = inStream.readLine()
+            var inputLine: String? = inStream.readLine()
             val servResponse = StringBuilder()
 
             while (inputLine != null) {
                 servResponse.append(inputLine)
+                inputLine = inStream.readLine()
             }
             inStream.close()
 
@@ -50,24 +98,12 @@ class CCApiTask(
             mCallback!!.OnEventFailure()
         }
 
-        return null
+        return this.mResponse
     }
 
-    override fun onPostExecute(aVoid: Void) {
+    override fun onPostExecute(resp: String) {
         if (this.mCallback != null) {
             this.mCallback.OnEventCompletion(mResponse)
         }
-    }
-
-    fun authUser(): Boolean {
-        return false
-    }
-
-    fun getFeed(): Unit {
-
-    }
-
-    fun sendMessage(): Boolean {
-        return false
     }
 }
