@@ -5,12 +5,12 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
-import com.example.tsuki.chit_chat.R
+import com.example.tsuki.chit_chat.MODEL.MessageManager
 import com.example.tsuki.chit_chat.UTIL.CCApiTask
-import org.json.JSONObject
+import com.example.tsuki.chit_chat.UTIL.EncoderDecoder
 
 class MessageRecyclerControler : Fragment() {
+    private var mMessageManager: MessageManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,32 +31,7 @@ class MessageRecyclerControler : Fragment() {
     }
 
     private fun onFeedData(data: String) {
-        //textView.text = data
-
-        val jsonData = JSONObject(data)
-
-        val count = jsonData.getInt("count")
-        val date = jsonData.getString("date")
-        val messages = jsonData.getJSONArray("messages")
-
-        /*
-        message format:
-
-        {
-          "_id" : "UUID",
-          "client" : "email@champlain.edu",
-          "date" : "datestring",
-          "dislikes" : 0,
-          "ip" : "255.255.255.255",
-          "likes" : 0,
-          "loc" : [
-            null,
-            null
-          ],
-          "message" : "lorem ipsum dolor sit amet"
-        }
-
-        */
+        this.mMessageManager = EncoderDecoder.Decode(data)
     }
 
     private fun likeMessage(messageId: String) {

@@ -1,7 +1,9 @@
 package com.example.tsuki.chit_chat.MODEL
 
+import com.google.gson.annotations.SerializedName
+
 class MessageManager(
-        var count: Int,
-        var date: String,
-        var messages: Array<Message>
+        @SerializedName("count") var count: Int = 0,
+        @SerializedName("date") var date: String = "",
+        @SerializedName("messages") var messages: Array<Message> = arrayOf()
 )
