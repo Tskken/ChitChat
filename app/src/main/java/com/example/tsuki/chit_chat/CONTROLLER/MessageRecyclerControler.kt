@@ -66,12 +66,10 @@ class MessageRecyclerControler : Fragment() {
         private var message: Message? = null
 
         fun bind(message: Message) {
-           val uName = message.client.split("@", ".")
+           val uName = message.client.split("@")[0]
+                   .split(".")
                    .joinToString(
-                           separator = " ",
-                           prefix = "",
-                           postfix = "",
-                           limit = 2
+                           separator = " "
                    )
 
             this.message = message
