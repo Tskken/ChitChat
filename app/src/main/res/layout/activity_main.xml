@@ -14,34 +14,4 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="center_vertical"
-        android:background="@color/colorPrimary">
-
-        <EditText
-            android:id="@+id/editText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="0dp"
-            android:layout_weight="1"
-            android:background="#fff"
-            android:ems="10"
-            android:inputType="textPersonName"
-            android:paddingStart="15dp"
-            android:paddingEnd="15dp"
-            android:text="@string/message_placeholder" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/send_button"
-            android:background="#74aa50"
-            android:layout_margin="5dp"/>
-    </LinearLayout>
-
 </LinearLayout>
