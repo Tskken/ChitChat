@@ -43,8 +43,6 @@ class MessageRecyclerControler : Fragment() {
         mRecyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
         mRecyclerView!!.layoutManager = LinearLayoutManager(activity)
 
-
-
         updateUI()
 
         return view
@@ -65,8 +63,7 @@ class MessageRecyclerControler : Fragment() {
         private var mMessageText: TextView = itemView.findViewById(R.id.message)
         private var mLikeButton: Button = itemView.findViewById(R.id.like_button)
         private var mDislikeButton: Button = itemView.findViewById(R.id.dislike_button)
-        private var mLikes = 0
-        private var mDislikes = 0
+        private var message: Message? = null
 
         fun bind(message: Message) {
            val uName = message.client.split("@", ".")
@@ -77,12 +74,11 @@ class MessageRecyclerControler : Fragment() {
                            limit = 2
                    )
 
-            mLikes = message.likes
-            mDislikes = message.dislikes
+            this.message = message
             mUName.text = uName
-            mMessageText.text = message.message
-            mLikeButton.text = "Likes - ${message.likes}"
-            mDislikeButton.text = "Dislikes - ${message.dislikes}"
+            mMessageText.text = this.message!!.message
+            mLikeButton.text = "Likes - ${this.message!!.likes}"
+            mDislikeButton.text = "Dislikes - ${this.message!!.dislikes}"
 
             mLikeButton.setOnClickListener {
                 likeMessage(message._id, this)
@@ -94,11 +90,11 @@ class MessageRecyclerControler : Fragment() {
         }
 
         fun like() {
-            mLikeButton.text = "Likes - ${++mLikes}"
+            mLikeButton.text = "Likes - ${++this.message!!.likes}"
         }
 
         fun dislike() {
-            mDislikeButton.text = "Dislikes - ${++mDislikes}"
+            mDislikeButton.text = "Dislikes - ${++this.message!!.dislikes}"
         }
     }
 
@@ -106,7 +102,6 @@ class MessageRecyclerControler : Fragment() {
         override fun getItemCount(): Int {
             return if (mMessageManager != null) {
                 mMessageManager!!.messages.size
-
             } else {
                 0
             }
