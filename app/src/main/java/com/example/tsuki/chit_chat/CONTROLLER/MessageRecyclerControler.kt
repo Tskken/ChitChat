@@ -50,39 +50,53 @@ class MessageRecyclerControler : Fragment() {
     }
 
     private inner class MessageView(inflater: LayoutInflater, parent: ViewGroup) :
-        RecyclerView.ViewHolder(inflater.inflate(R.layout.recycler_view, parent, false)
-    ) {
-        private var mUName = parent.findViewById(R.id.user_name) as TextView
-        private var mMessageText = parent.findViewById(R.id.message) as TextView
-        private var mLikeButton = parent.findViewById(R.id.like_button) as Button
-        private var mDislikeButton = parent.findViewById(R.id.dislike_button) as Button
+        RecyclerView.ViewHolder(
+                inflater.inflate(
+                        R.layout.recycler_view,
+                        parent,
+                        false
+                )
 
-        init {
-            mLikeButton.setOnClickListener {
-                //TODO: Have like post to server
-            }
-            mDislikeButton.setOnClickListener {
-                //TODO: have dislike post to server
-            }
-        }
+        )
+    {
+
+        private var mUName: TextView? = itemView.findViewById(R.id.user_name)
+        private var mMessageText: TextView? = itemView.findViewById(R.id.message)
+        private var mLikeButton: Button? = itemView.findViewById(R.id.like_button)
+        private var mDislikeButton: Button? = itemView.findViewById(R.id.dislike_button)
 
         fun bind(message: Message) {
-           var uName = message.client.split("@", ".").joinToString(
-                   separator = " ",
-                   prefix = "",
-                   postfix = "",
-                   limit = 2
-           )
-            mUName.text = uName
-            mMessageText.text = message.message
-            mLikeButton.text = message.likes.toString()
-            mDislikeButton.text = message.dislikes.toString()
+           val uName = message.client.split("@", ".")
+                   .joinToString(
+                           separator = " ",
+                           prefix = "",
+                           postfix = "",
+                           limit = 2
+                   )
+
+            mUName?.text = uName
+            mMessageText?.text = message.message
+            mLikeButton?.text = message.likes.toString()
+            mDislikeButton?.text = message.dislikes.toString()
+
+            mLikeButton?.setOnClickListener {
+                likeMessage(message._id)
+            }
+
+            mDislikeButton?.setOnClickListener {
+                dislikeMessage(message._id)
+            }
         }
     }
 
     private inner class MessageAdapter : RecyclerView.Adapter<MessageView>() {
         override fun getItemCount(): Int {
-            return mMessageManager!!.messages.size
+            return if (mMessageManager != null) {
+                mMessageManager!!.messages.size
+
+            } else {
+                0
+            }
         }
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageView {
@@ -111,6 +125,8 @@ class MessageRecyclerControler : Fragment() {
 
     private fun onFeedData(data: String) {
         this.mMessageManager = MessageManager.decode(data)
+
+        updateUI()
     }
 
     private fun likeMessage(messageId: String) {
