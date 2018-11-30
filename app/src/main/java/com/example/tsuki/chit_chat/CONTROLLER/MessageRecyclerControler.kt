@@ -13,6 +13,7 @@ import android.widget.TextView
 import com.example.tsuki.chit_chat.MODEL.Message
 import com.example.tsuki.chit_chat.R
 import com.example.tsuki.chit_chat.UTIL.CCApiTask
+import kotlinx.android.synthetic.main.recycler_cell.*
 
 class MessageRecyclerControler : Fragment() {
     private var mMessageManager: MessageManager? = null
@@ -64,6 +65,8 @@ class MessageRecyclerControler : Fragment() {
         private var mMessageText: TextView = itemView.findViewById(R.id.message)
         private var mLikeButton: Button = itemView.findViewById(R.id.like_button)
         private var mDislikeButton: Button = itemView.findViewById(R.id.dislike_button)
+        private var mLikes = 0
+        private var mDislikes = 0
 
         fun bind(message: Message) {
            val uName = message.client.split("@", ".")
@@ -74,18 +77,28 @@ class MessageRecyclerControler : Fragment() {
                            limit = 2
                    )
 
+            mLikes = message.likes
+            mDislikes = message.dislikes
             mUName.text = uName
             mMessageText.text = message.message
             mLikeButton.text = "Likes - ${message.likes}"
             mDislikeButton.text = "Dislikes - ${message.dislikes}"
 
             mLikeButton.setOnClickListener {
-                likeMessage(message._id)
+                likeMessage(message._id, this)
             }
 
             mDislikeButton.setOnClickListener {
-                dislikeMessage(message._id)
+                dislikeMessage(message._id, this)
             }
+        }
+
+        fun like() {
+            mLikeButton.text = "Likes - ${++mLikes}"
+        }
+
+        fun dislike() {
+            mDislikeButton.text = "Dislikes - ${++mDislikes}"
         }
     }
 
@@ -129,12 +142,12 @@ class MessageRecyclerControler : Fragment() {
         updateUI()
     }
 
-    private fun likeMessage(messageId: String) {
+    private fun likeMessage(messageId: String, message: MessageView) {
         // create api task
         val apiTask = CCApiTask(
                 "$sServerURL/like/$messageId",
                 CCApiTask.Companion.METHODS.GET,
-                { data -> /* todo: determine how we deal with response data */ },
+                { message.like() },
                 { onRequestFailure() }
         )
 
@@ -142,12 +155,12 @@ class MessageRecyclerControler : Fragment() {
         apiTask.execute()
     }
 
-    private fun dislikeMessage(messageId: String) {
+    private fun dislikeMessage(messageId: String, message: MessageView) {
         // create api task
         val apiTask = CCApiTask(
                 "$sServerURL/dislike/$messageId",
                 CCApiTask.Companion.METHODS.GET,
-                { data -> /* todo: determine how we deal with response data */ },
+                {  message.dislike() },
                 { onRequestFailure() }
         )
 
