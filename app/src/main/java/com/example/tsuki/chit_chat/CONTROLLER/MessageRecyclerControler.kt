@@ -52,7 +52,7 @@ class MessageRecyclerControler : Fragment() {
     private inner class MessageView(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(
                 inflater.inflate(
-                        R.layout.recycler_view,
+                        R.layout.recycler_cell,
                         parent,
                         false
                 )
@@ -60,10 +60,10 @@ class MessageRecyclerControler : Fragment() {
         )
     {
 
-        private var mUName: TextView? = itemView.findViewById(R.id.user_name)
-        private var mMessageText: TextView? = itemView.findViewById(R.id.message)
-        private var mLikeButton: Button? = itemView.findViewById(R.id.like_button)
-        private var mDislikeButton: Button? = itemView.findViewById(R.id.dislike_button)
+        private var mUName: TextView = itemView.findViewById(R.id.user_name)
+        private var mMessageText: TextView = itemView.findViewById(R.id.message)
+        private var mLikeButton: Button = itemView.findViewById(R.id.like_button)
+        private var mDislikeButton: Button = itemView.findViewById(R.id.dislike_button)
 
         fun bind(message: Message) {
            val uName = message.client.split("@", ".")
@@ -74,16 +74,16 @@ class MessageRecyclerControler : Fragment() {
                            limit = 2
                    )
 
-            mUName?.text = uName
-            mMessageText?.text = message.message
-            mLikeButton?.text = message.likes.toString()
-            mDislikeButton?.text = message.dislikes.toString()
+            mUName.text = uName
+            mMessageText.text = message.message
+            mLikeButton.text = "Likes - ${message.likes}"
+            mDislikeButton.text = "Dislikes - ${message.dislikes}"
 
-            mLikeButton?.setOnClickListener {
+            mLikeButton.setOnClickListener {
                 likeMessage(message._id)
             }
 
-            mDislikeButton?.setOnClickListener {
+            mDislikeButton.setOnClickListener {
                 dislikeMessage(message._id)
             }
         }
@@ -134,7 +134,7 @@ class MessageRecyclerControler : Fragment() {
         val apiTask = CCApiTask(
                 "$sServerURL/like/$messageId",
                 CCApiTask.Companion.METHODS.GET,
-                { data -> /* todo: determine how we deal with data */ },
+                { data -> /* todo: determine how we deal with response data */ },
                 { onRequestFailure() }
         )
 
@@ -147,7 +147,7 @@ class MessageRecyclerControler : Fragment() {
         val apiTask = CCApiTask(
                 "$sServerURL/dislike/$messageId",
                 CCApiTask.Companion.METHODS.GET,
-                { data -> /* todo: determine how we deal with data */ },
+                { data -> /* todo: determine how we deal with response data */ },
                 { onRequestFailure() }
         )
 
