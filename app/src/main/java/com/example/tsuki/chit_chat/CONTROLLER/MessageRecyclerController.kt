@@ -208,10 +208,20 @@ class MessageRecyclerController : Fragment() {
         // TODO: Establish feed request failure method
     }
 
+    /*
+    WE DID NOT WRITE THIS FUNCTION
+    author: Gunhan
+    url: https://stackoverflow.com/questions/41790357/close-hide-the-android-soft-keyboard-with-kotlin
+     */
     fun Fragment.hideKeyboard() {
         activity?.hideKeyboard(view!!)
     }
 
+    /*
+    WE DID NOT WRITE THIS FUNCTION
+    author: Gunhan
+    url: https://stackoverflow.com/questions/41790357/close-hide-the-android-soft-keyboard-with-kotlin
+     */
     fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
