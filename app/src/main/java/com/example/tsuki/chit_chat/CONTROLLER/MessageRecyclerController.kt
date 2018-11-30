@@ -1,5 +1,7 @@
 package com.example.tsuki.chit_chat.CONTROLLER
 
+import android.app.Activity
+import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v7.widget.LinearLayoutManager
@@ -8,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.tsuki.chit_chat.MODEL.MessageManager
 import android.support.v7.widget.RecyclerView
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
@@ -179,6 +182,10 @@ class MessageRecyclerController : Fragment() {
                 sServerURL,
                 CCApiTask.Companion.METHODS.POST,
                 {
+                    mMessageEntry?.setText("")
+
+                    hideKeyboard()
+
                     val apiTask = CCApiTask(
                             sServerURL,
                             CCApiTask.Companion.METHODS.GET,
@@ -199,6 +206,15 @@ class MessageRecyclerController : Fragment() {
 
     private fun onRequestFailure() {
         // TODO: Establish feed request failure method
+    }
+
+    fun Fragment.hideKeyboard() {
+        activity?.hideKeyboard(view!!)
+    }
+
+    fun Context.hideKeyboard(view: View) {
+        val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
 
     private companion object {
