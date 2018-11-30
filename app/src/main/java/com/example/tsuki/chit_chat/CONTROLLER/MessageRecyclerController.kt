@@ -9,20 +9,25 @@ import android.view.ViewGroup
 import com.example.tsuki.chit_chat.MODEL.MessageManager
 import android.support.v7.widget.RecyclerView
 import android.widget.Button
+import android.widget.EditText
 import android.widget.TextView
 import com.example.tsuki.chit_chat.MODEL.Message
 import com.example.tsuki.chit_chat.R
 import com.example.tsuki.chit_chat.UTIL.CCApiTask
 import kotlinx.android.synthetic.main.recycler_cell.*
 
-class MessageRecyclerControler : Fragment() {
+class MessageRecyclerController : Fragment() {
     private var mMessageManager: MessageManager? = null
     private var mRecyclerView: RecyclerView? = null
     private var mAdapter: MessageAdapter? = null
+    private var mMessageEntry: EditText? = null
+    private var mMessageSend: Button? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -44,6 +49,13 @@ class MessageRecyclerControler : Fragment() {
         mRecyclerView!!.layoutManager = LinearLayoutManager(activity)
 
         updateUI()
+
+        mMessageEntry = view.findViewById(R.id.message_entry)
+        mMessageSend = view.findViewById(R.id.message_send)
+
+        mMessageSend!!.setOnClickListener {
+            postMessage(mMessageEntry!!.text.toString())
+        }
 
         return view
     }
@@ -166,7 +178,17 @@ class MessageRecyclerControler : Fragment() {
         val apiTask = CCApiTask(
                 sServerURL,
                 CCApiTask.Companion.METHODS.POST,
-                { data -> /* todo: determine how we deal with data */ },
+                {
+                    val apiTask = CCApiTask(
+                            sServerURL,
+                            CCApiTask.Companion.METHODS.GET,
+                            { data: String -> onFeedData(data) },
+                            { onRequestFailure() }
+                    )
+
+                    // execute api call
+                    apiTask.execute()
+                },
                 { onRequestFailure() },
                 message
         )

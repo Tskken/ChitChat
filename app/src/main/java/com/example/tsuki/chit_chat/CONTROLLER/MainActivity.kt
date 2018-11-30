@@ -3,10 +3,7 @@ package com.example.tsuki.chit_chat.CONTROLLER
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
-import android.widget.TextView
 import com.example.tsuki.chit_chat.R
-import com.example.tsuki.chit_chat.UTIL.CCApiTask
-import org.json.JSONObject
 
 class MainActivity : AppCompatActivity() {
 
@@ -26,7 +23,7 @@ class MainActivity : AppCompatActivity() {
 
 
             // establish fragment //
-            fragment = MessageRecyclerControler()
+            fragment = MessageRecyclerController()
 
             // pass bundle data to fragment as argument //
             fragment.arguments = bundle
