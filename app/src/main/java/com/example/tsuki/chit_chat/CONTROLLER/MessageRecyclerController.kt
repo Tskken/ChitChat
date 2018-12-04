@@ -11,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.tsuki.chit_chat.MODEL.MessageManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.EditText
@@ -230,7 +231,7 @@ class MessageRecyclerController : Fragment() {
     }
 
     private fun onRequestFailure() {
-        // TODO: Establish feed request failure method
+        Log.d("ChitChatRequest", "There was a request failure!!!")
     }
 
     /*
