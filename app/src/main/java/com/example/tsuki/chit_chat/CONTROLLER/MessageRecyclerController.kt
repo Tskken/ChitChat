@@ -121,7 +121,7 @@ class MessageRecyclerController : Fragment() {
     private inner class MessageAdapter : RecyclerView.Adapter<MessageView>() {
         override fun getItemCount(): Int {
             return if (mMessageManager != null) {
-                mMessageManager!!.messages.size
+                mMessageManager!!.count
             } else {
                 0
             }
