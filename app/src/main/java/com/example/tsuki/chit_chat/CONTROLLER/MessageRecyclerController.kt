@@ -28,11 +28,12 @@ class MessageRecyclerController : Fragment() {
     private var mMessageSend: Button? = null
     private var mSwipeRefresh: SwipeRefreshLayout? = null
 
+    private var mLiked = Array(0){""}
+    private var mDisliked = Array(0){""}
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -55,7 +56,7 @@ class MessageRecyclerController : Fragment() {
         }
 
         // Setup Swipe-to-Refresh //
-        mSwipeRefresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
+        mSwipeRefresh = view.findViewById(R.id.swipe_refresh)
         mSwipeRefresh?.setOnRefreshListener { fetchFeed() }
 
         return view
@@ -156,6 +157,10 @@ class MessageRecyclerController : Fragment() {
     }
 
     private fun likeMessage(messageId: String, message: MessageView) {
+        if (mLiked.contains(messageId)) {
+            return
+        }
+
         // create api task
         val apiTask = CCApiTask(
                 "$sServerURL/like/$messageId",
@@ -166,9 +171,14 @@ class MessageRecyclerController : Fragment() {
 
         // execute api call
         apiTask.execute()
+        mLiked = mLiked.plus(messageId)
     }
 
     private fun dislikeMessage(messageId: String, message: MessageView) {
+        if (mDisliked.contains(messageId)) {
+            return
+        }
+
         // create api task
         val apiTask = CCApiTask(
                 "$sServerURL/dislike/$messageId",
@@ -179,6 +189,8 @@ class MessageRecyclerController : Fragment() {
 
         // execute api call
         apiTask.execute()
+
+        mDisliked = mDisliked.plus(messageId)
     }
 
     private fun postMessage(message: String) {
