@@ -31,11 +31,6 @@ class MessageRecyclerController : Fragment() {
     private var mLiked = Array(0){""}
     private var mDisliked = Array(0){""}
 
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.recycler_view, container, false)
 
@@ -62,11 +57,15 @@ class MessageRecyclerController : Fragment() {
         return view
     }
 
+    // Reload messages //
     override fun onResume() {
         super.onResume()
+
+        // Refresh feed //
         fetchFeed()
     }
 
+    // Recycler View class //
     private inner class MessageView(inflater: LayoutInflater, parent: ViewGroup) :
         RecyclerView.ViewHolder(
                 inflater.inflate(
@@ -79,12 +78,15 @@ class MessageRecyclerController : Fragment() {
     {
 
         private var mUName: TextView = itemView.findViewById(R.id.user_name)
+        private var mDateTime: TextView = itemView.findViewById(R.id.date_time)
         private var mMessageText: TextView = itemView.findViewById(R.id.message)
         private var mLikeButton: Button = itemView.findViewById(R.id.like_button)
         private var mDislikeButton: Button = itemView.findViewById(R.id.dislike_button)
         private var message: Message? = null
 
+        // Bind message data to cell //
         fun bind(message: Message) {
+            // Split user name to remove email //
            val uName = message.client.split("@")[0]
                    .split(".")
                    .joinToString(
@@ -93,6 +95,7 @@ class MessageRecyclerController : Fragment() {
 
             this.message = message
             mUName.text = uName
+            mDateTime.text = message.date
             mMessageText.text = this.message!!.message
             mLikeButton.text = "Likes - ${this.message!!.likes}"
             mDislikeButton.text = "Dislikes - ${this.message!!.dislikes}"

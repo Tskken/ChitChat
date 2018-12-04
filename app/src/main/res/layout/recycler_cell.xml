@@ -17,6 +17,13 @@
         android:textAlignment="center"
         android:textAllCaps="true"
         android:textColor="#fff" />
+    <TextView
+        android:id="@+id/date_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="temp date"
+        android:textColor="#fff"
+        android:textAlignment="center"/>
 
     <TextView
         android:id="@+id/message"
