@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -25,6 +26,7 @@ class MessageRecyclerController : Fragment() {
     private var mAdapter: MessageAdapter? = null
     private var mMessageEntry: EditText? = null
     private var mMessageSend: Button? = null
+    private var mSwipeRefresh: SwipeRefreshLayout? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -36,23 +38,15 @@ class MessageRecyclerController : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.recycler_view, container, false)
 
-        // create api task to get initial data
-        val apiTask = CCApiTask(
-                sServerURL,
-                CCApiTask.Companion.METHODS.GET,
-                { data -> onFeedData(data) },
-                { onRequestFailure() }
-        )
-
-        // execute api call
-        apiTask.execute()
+        fetchFeed()
 
         // Initialize RecyclerView //
         mRecyclerView = view.findViewById(R.id.recycler_view) as RecyclerView
-        mRecyclerView!!.layoutManager = LinearLayoutManager(activity)
+        mRecyclerView!!.layoutManager = LinearLayoutManager(activity!!)
 
         updateUI()
 
+        // Init Message Sending //
         mMessageEntry = view.findViewById(R.id.message_entry)
         mMessageSend = view.findViewById(R.id.message_send)
 
@@ -60,7 +54,16 @@ class MessageRecyclerController : Fragment() {
             postMessage(mMessageEntry!!.text.toString())
         }
 
+        // Setup Swipe-to-Refresh //
+        mSwipeRefresh = view.findViewById<SwipeRefreshLayout>(R.id.swipe_refresh)
+        mSwipeRefresh?.setOnRefreshListener { fetchFeed() }
+
         return view
+    }
+
+    override fun onResume() {
+        super.onResume()
+        fetchFeed()
     }
 
     private inner class MessageView(inflater: LayoutInflater, parent: ViewGroup) :
@@ -141,6 +144,8 @@ class MessageRecyclerController : Fragment() {
             // Update UI //
             activity!!.runOnUiThread { mAdapter!!.notifyDataSetChanged() }
         }
+
+        mSwipeRefresh?.isRefreshing = false
     }
 
 
@@ -186,18 +191,23 @@ class MessageRecyclerController : Fragment() {
 
                     hideKeyboard()
 
-                    val apiTask = CCApiTask(
-                            sServerURL,
-                            CCApiTask.Companion.METHODS.GET,
-                            { data: String -> onFeedData(data) },
-                            { onRequestFailure() }
-                    )
-
-                    // execute api call
-                    apiTask.execute()
+                    fetchFeed()
                 },
                 { onRequestFailure() },
                 message
+        )
+
+        // execute api call
+        apiTask.execute()
+    }
+
+    private fun fetchFeed() {
+        // create api task to get initial data
+        val apiTask = CCApiTask(
+                sServerURL,
+                CCApiTask.Companion.METHODS.GET,
+                { data -> onFeedData(data) },
+                { onRequestFailure() }
         )
 
         // execute api call
