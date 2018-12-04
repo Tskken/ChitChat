@@ -1,7 +1,6 @@
 package com.example.tsuki.chit_chat.MODEL
 
 import com.google.gson.annotations.SerializedName
-import java.util.*
 
 class Message(
         @SerializedName("_id") var _id: String = "",
@@ -11,12 +10,11 @@ class Message(
         @SerializedName("dislikes") var dislikes: Int = 0,
         @SerializedName("client") var client: String = ""
 ) {
-
-    fun like() {
-        this.likes += 1
+    fun like(): Int {
+        return ++this.likes
     }
 
-    fun dislike() {
-        this.dislikes += 1
+    fun dislike(): Int {
+        return ++this.dislikes
     }
 }

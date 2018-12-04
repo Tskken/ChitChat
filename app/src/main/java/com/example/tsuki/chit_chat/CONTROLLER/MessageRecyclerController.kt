@@ -97,7 +97,7 @@ class MessageRecyclerController : Fragment() {
             mUName.text = uName
             mDateTime.text = message.date
             mMessageText.text = this.message!!.message
-            mLikeButton.text = "Likes - ${this.message!!.likes}"
+            mLikeButton.text =  "Likes - ${this.message!!.likes}"
             mDislikeButton.text = "Dislikes - ${this.message!!.dislikes}"
 
             mLikeButton.setOnClickListener {
@@ -110,11 +110,11 @@ class MessageRecyclerController : Fragment() {
         }
 
         fun like() {
-            mLikeButton.text = "Likes - ${++this.message!!.likes}"
+            mLikeButton.text = "Likes - ${this.message!!.like()}"
         }
 
         fun dislike() {
-            mDislikeButton.text = "Dislikes - ${++this.message!!.dislikes}"
+            mDislikeButton.text = "Dislikes - ${this.message!!.dislike()}"
         }
     }
 
