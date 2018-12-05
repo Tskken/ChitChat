@@ -20,7 +20,7 @@ class CCApiTask(
             GET, POST
         }
 
-        // TODO: Determine better way to manage this data and auth users
+        // Not secure API data info please ignore //
         private const val API_KEY = "436a85b4-9966-428c-b608-0552b9c55a01"
         private const val EMAIL = "easter@champlain.edu"
     }

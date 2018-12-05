@@ -21,7 +21,6 @@ class MainActivity : AppCompatActivity() {
             // create new Bundle //
             val bundle = Bundle()
 
-
             // establish fragment //
             fragment = MessageRecyclerController()
 
