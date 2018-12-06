@@ -46,11 +46,6 @@ class MessageRecyclerController : Fragment() {
     // List of disliked messages //
     private var mDisliked = Array(0){""}
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        // TODO: save likes and dislike list
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.recycler_view, container, false)
 
@@ -86,11 +81,6 @@ class MessageRecyclerController : Fragment() {
 
         // Refresh feed //
         fetchFeed()
-    }
-
-    override fun onStop() {
-        super.onStop()
-        // TODO: save instance state
     }
 
     // Recycler View class //
@@ -357,7 +347,7 @@ class MessageRecyclerController : Fragment() {
     author: Gunhan
     url: https://stackoverflow.com/questions/41790357/close-hide-the-android-soft-keyboard-with-kotlin
      */
-    fun Fragment.hideKeyboard() {
+    private fun Fragment.hideKeyboard() {
         activity?.hideKeyboard(view!!)
     }
 
@@ -366,7 +356,7 @@ class MessageRecyclerController : Fragment() {
     author: Gunhan
     url: https://stackoverflow.com/questions/41790357/close-hide-the-android-soft-keyboard-with-kotlin
      */
-    fun Context.hideKeyboard(view: View) {
+    private fun Context.hideKeyboard(view: View) {
         val inputMethodManager = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         inputMethodManager.hideSoftInputFromWindow(view.windowToken, 0)
     }
